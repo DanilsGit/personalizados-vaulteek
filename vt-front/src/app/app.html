@@ -1,0 +1,130 @@
+<div class="app">
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <img [src]="'/logo.png'" alt="Vaulteek" class="logo" />
+      <h1>Personalizados Vaulteek</h1>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="container">
+      <!-- Selector de Anime Persistente -->
+      <section class="section controls-bar">
+        <div class="anime-selector-dropdown">
+          <label for="anime-select">Anime:</label>
+          <select
+            id="anime-select"
+            [value]="selectedAnime() || ''"
+            (change)="onAnimeChange($event)"
+            [disabled]="loading()"
+          >
+            <option value="">Selecciona un anime</option>
+            @for (anime of animes(); track anime.id) {
+              <option [value]="anime.id">{{ anime.name }}</option>
+            }
+          </select>
+        </div>
+
+        @if (selectedAnime()) {
+          <button class="btn-compartir" (click)="compartir()">Consultar disponibilidad 📱</button>
+        }
+      </section>
+
+      <!-- Personalizador Principal -->
+      <section class="section personalizador">
+        @if (loading()) {
+          <div class="loading">Cargando...</div>
+        }
+
+        <div class="personalizador-content">
+          <!-- Panel de Preview -->
+          <div class="preview-panel">
+            <div class="vista-tabs">
+              <button [class.active]="vista() === 'frontal'" (click)="cambiarVista('frontal')">
+                Vista Frontal
+              </button>
+              <button [class.active]="vista() === 'posterior'" (click)="cambiarVista('posterior')">
+                Vista Posterior
+              </button>
+            </div>
+
+            <div class="preview-container">
+              <div class="hoddie-preview">
+                <div class="hoddie-svg-container">
+                  <!-- imagen del color del hoddie y su orientación -->
+                  <img
+                    [src]="hoddieImageUrl()"
+                    [alt]="'Hoddie ' + selectedColor().name + ' ' + vista()"
+                    class="hoddie-base"
+                  />
+                </div>
+                @if (currentDesign()) {
+                  <img
+                    [src]="getImageUrl(currentDesign()!.filename)"
+                    [alt]="'Diseño ' + vista()"
+                    class="hoddie-design"
+                    [class.hoddie-design-frontal]="vista() === 'frontal'"
+                    [class.hoddie-design-posterior]="vista() === 'posterior'"
+                  />
+                }
+              </div>
+            </div>
+
+            <!-- Selector de Color -->
+            <div class="color-selector">
+              <h3>Color del Hoddie</h3>
+              <div class="color-grid">
+                @for (color of colores; track color.name) {
+                  <button
+                    class="color-option"
+                    [class.selected]="selectedColor().name === color.name"
+                    [style.background-color]="color.hex"
+                    [title]="color.name"
+                    (click)="selectColor(color)"
+                  ></button>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel de Diseños -->
+          <div class="designs-panel">
+            <div class="design-section">
+              <p class="info-text">Para escoger el diseño {{ otraVista }} cambia la vista previa</p>
+                <h3>{{ 'Estampado ' + vista() }}</h3>
+              <div class="designs-grid">
+                @for (design of designs(); track design.id; let i = $index) {
+                  <div
+                    class="design-card"
+                    [class.selected]="
+                      vista() === 'frontal'
+                        ? selectedFrontal() && selectedFrontal()!.id === design.id
+                        : selectedPosterior() && selectedPosterior()!.id === design.id
+                    "
+                    (click)="
+                      vista() === 'frontal' ? selectFrontal(design) : selectPosterior(design)
+                    "
+                  >
+                    <img [src]="getImageUrl(design.filename)" [alt]="design.name" />
+                    <p>{{ i + 1 }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+
+            @if (loading()) {
+              <div class="loading">Cargando diseños...</div>
+            }
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2026 Vaulteek - Personalizados Vaulteek</p>
+  </footer>
+</div>
