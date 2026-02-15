@@ -99,9 +99,12 @@ export class App implements OnInit {
       return;
     }
 
-    this.selectedAnime.set(animeId);
+    // Limpiar diseños ANTES de cambiar el anime para evitar
+    // peticiones con combinaciones incorrectas de anime/filename
     this.selectedFrontal.set(null);
     this.selectedPosterior.set(null);
+    this.designs.set([]);
+    this.selectedAnime.set(animeId);
     this.loadDesigns(animeId);
   }
 

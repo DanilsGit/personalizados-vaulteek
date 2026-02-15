@@ -26,10 +26,6 @@
             }
           </select>
         </div>
-
-        @if (selectedAnime()) {
-          <button class="btn-compartir" (click)="compartir()">Consultar disponibilidad 📱</button>
-        }
       </section>
 
       <!-- Personalizador Principal -->
@@ -93,7 +89,12 @@
           <div class="designs-panel">
             <div class="design-section">
               <p class="info-text">Para escoger el diseño {{ otraVista }} cambia la vista previa</p>
-                <h3>{{ 'Estampado ' + vista() }}</h3>
+              <h3>{{ 'Estampado ' + vista() }}</h3>
+              @if (designs().length === 0 && !loading()) {
+                <p class="info-text">
+                  No hay diseños disponibles para este anime. Estaremos agregando más pronto.
+                </p>
+              }
               <div class="designs-grid">
                 @for (design of designs(); track design.id; let i = $index) {
                   <div
@@ -120,6 +121,9 @@
           </div>
         </div>
       </section>
+      @if (selectedAnime()) {
+        <button class="btn-compartir" (click)="compartir()">Enviar diseño 📱</button>
+      }
     </div>
   </main>
 
