@@ -1,4 +1,4 @@
 export const environment = {
-    API_URL: 'http://localhost:3000/api',
-    production: false,
+    API_URL: 'https://personalizados.vaulteek.shop/api',
+    production: true,
 };
