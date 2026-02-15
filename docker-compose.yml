@@ -4,34 +4,23 @@ services:
       context: ./vt-back
       dockerfile: Dockerfile
     container_name: vaulteek-backend
-    expose:
-      - "3000"
+    ports:
+      - "3000:3000"
     env_file:
       - .env
     volumes:
       - ./vt-back/gcp-key.json:/app/gcp-key.json:ro
     restart: unless-stopped
-    networks:
-      - vaulteek-network-personalizados
-      - odoo_vaulteek_default  # Red del otro docker-compose
 
   vt-front:
     build:
       context: ./vt-front
       dockerfile: Dockerfile
     container_name: vaulteek-frontend
-    expose:
-      - "4000"
-    environment:
-      - API_URL=https://personalizados.vaulteek.shop/api
+    ports:
+      - "4000:4000"
     depends_on:
       - vt-back
     restart: unless-stopped
-    networks:
-      - vaulteek-network-personalizados
-      - odoo_vaulteek_default  # Red del otro docker-compose
 
-networks:
-  vaulteek-network-personalizados:
-  odoo_vaulteek_default:
-    external: true
+
